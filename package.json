@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "mocha tests",
-    "start": "node index.js"
+    "start": "node index.js",
+    "eslint": "eslint ."
   },
   "keywords": [
     "Xendit"
@@ -21,7 +22,11 @@
     "sqlite3": "^4.0.6"
   },
   "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
     "mocha": "^6.1.4",
+    "prettier": "^2.2.1",
     "supertest": "^4.0.2"
   }
 }
