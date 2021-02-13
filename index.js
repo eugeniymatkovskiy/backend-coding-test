@@ -1,6 +1,6 @@
 const port = 8010;
-
 const sqlite3 = require('sqlite3').verbose();
+require('./winston');
 
 const db = new sqlite3.Database(':memory:');
 
