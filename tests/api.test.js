@@ -122,4 +122,55 @@ describe('API tests', () => {
         });
     });
   });
+
+  describe('GET /rides', () => {
+    before(() => {
+      for (let i = 1; i < 5; i++) {
+        const data = { ...reqBody };
+        data.driver_name += i;
+        request(app)
+          .post('/rides')
+          .send(data)
+          .expect('Content-Type', /application\/json/)
+          .expect(200)
+          .end(() => {});
+      }
+    });
+
+    it('should return first two rides', (done) => {
+      request(app)
+        .get('/rides')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(2);
+          done();
+        });
+    });
+
+    it('should return last ride (pagination test)', (done) => {
+      request(app)
+        .get('/rides?page=3')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(1);
+          done();
+        });
+    });
+
+    it('should return all rides', (done) => {
+      request(app)
+        .get('/rides?limit=10')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(5);
+          done();
+        });
+    });
+  });
 });

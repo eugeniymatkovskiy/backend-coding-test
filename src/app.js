@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 
 const jsonParser = bodyParser.json();
 
+const { getDataForPagination } = require('./helper');
+
 module.exports = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
@@ -86,7 +88,9 @@ module.exports = (db) => {
   });
 
   app.get('/rides', (req, res) => {
-    db.all('SELECT * FROM Rides', (err, rows) => {
+    const { limit, offset } = getDataForPagination(req.query);
+
+    db.all('SELECT * FROM Rides ORDER BY rideID LIMIT ? OFFSET ?', [limit, offset], (err, rows) => {
       if (err) {
         return res.send({
           error_code: 'SERVER_ERROR',
