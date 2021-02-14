@@ -10,7 +10,8 @@
     "test": "mocha tests",
     "start": "node index.js",
     "eslint": "eslint .",
-    "coverage": "nyc npm run test"
+    "coverage": "nyc npm run test",
+    "test:load": "artillery quick --count 10 -n 20 http://localhost:8010/rides"
   },
   "keywords": [
     "Xendit"
@@ -25,6 +26,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "artillery": "^1.6.1",
     "chai": "^4.3.0",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
