@@ -67,6 +67,19 @@ describe('API tests', () => {
   });
 
   describe('POST /rides', () => {
+    it('create new ride validation err', (done) => {
+      request(app)
+        .post('/rides')
+        .send({ ...reqBody, ...{ start_lat: 220 } })
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys(...['_original', 'details']);
+          done();
+        });
+    });
+
     it('must create new ride', (done) => {
       request(app)
         .post('/rides')
@@ -77,11 +90,11 @@ describe('API tests', () => {
         .end((err, res) => {
           const { body } = res;
 
-          expect(body).to.be.an('array');
-          const createdRide = body.pop();
-          expect(createdRide).to.deep.include(expectedRide);
-          expect(createdRide).to.not.have.all.keys('rideID');
-          createdRideId = createdRide.rideID;
+          expect(body).to.be.an('object');
+          expect(body).to.deep.include(expectedRide);
+          const expectedObject = { ...expectedRide, rideID: 1, created: new Date() };
+          expect(body).to.have.all.keys(...Object.keys(expectedObject));
+          createdRideId = body.rideID;
 
           done();
         });
@@ -89,6 +102,18 @@ describe('API tests', () => {
   });
 
   describe('GET /rides', () => {
+    it('get rides validation error', (done) => {
+      request(app)
+        .get('/rides?page=somepage')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys(...['_original', 'details']);
+          done();
+        });
+    });
+
     it('should return one ride', (done) => {
       request(app)
         .get('/rides')
@@ -114,10 +139,19 @@ describe('API tests', () => {
         .expect(200)
         .end((err, res) => {
           const { body } = res;
-          expect(body).to.be.an('array');
-          expect(body.length).to.equal(1);
-          const createdRide = body.pop();
-          expect(createdRide).to.deep.include({ ...expectedRide, ...{ rideID: createdRideId } });
+          expect(body).to.be.an('object');
+          expect(body).to.deep.include({ ...expectedRide, ...{ rideID: createdRideId } });
+          done();
+        });
+    });
+
+    it('should return validation err', (done) => {
+      request(app)
+        .get('/rides/testStringId')
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys(...['_original', 'details']);
           done();
         });
     });

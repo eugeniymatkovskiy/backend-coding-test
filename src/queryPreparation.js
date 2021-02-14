@@ -6,5 +6,14 @@ module.exports = {
     const offset = page > 1 ? (page - 1) * limit : 0;
 
     return { limit, offset };
-  }
+  },
+  prepareParamsForInsert: (body) => [
+    body.start_lat,
+    body.start_long,
+    body.end_lat,
+    body.end_long,
+    body.rider_name,
+    body.driver_name,
+    body.driver_vehicle
+  ]
 };

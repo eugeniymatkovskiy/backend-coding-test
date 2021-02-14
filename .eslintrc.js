@@ -16,6 +16,7 @@ module.exports = {
     'no-console': 0,
     'comma-dangle': 0,
     'no-restricted-syntax': 0,
-    'no-plusplus': 0
+    'no-plusplus': 0,
+    'no-throw-literal': 0
   },
 };
